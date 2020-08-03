@@ -118,13 +118,19 @@ class PrestaShopValetDriver extends ValetDriver
     {
         //Legacy URls
         $parts = explode('/',$uri);
-        if(isset($parts[1]) && $parts[1] !='' && file_exists($adminIdex = $sitePath . '/'. $parts[1] .'/index.php')){
-            $_SERVER['SCRIPT_FILENAME'] = $adminIdex;
+        if(isset($parts[1]) && $parts[1] !='' && file_exists($adminIndex = $sitePath . '/'. $parts[1] .'/index.php')){
+
+            if(isset($parts[2]) && $parts[2] === 'filemanager') {
+                $_SERVER['SCRIPT_FILENAME'] = $sitePath . $uri;
+                return $sitePath . $uri;
+            }
+
+            $_SERVER['SCRIPT_FILENAME'] = $adminIndex;
             $_SERVER['SCRIPT_NAME'] = '/'. $parts[1] .'/index.php';
             if(isset($_GET['controller']) || isset($_GET['tab'])){
-                return $adminIdex;
+                return $adminIndex;
             }
-            return $adminIdex;
+            return $adminIndex;
         }
         $_SERVER['SCRIPT_NAME'] = '/index.php';
         $_SERVER['SCRIPT_FILENAME'] = $sitePath . '/index.php';
